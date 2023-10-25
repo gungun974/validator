@@ -130,5 +130,49 @@ func stringValidatorTests() {
 				Entry("_@ is a valid email", "_@golang.com"),
 			)
 		})
+
+		Describe("StringPhoneValidator", func() {
+			It("should not return a String when input is not a phone number", func() {
+				// arrange
+				value := "hoi"
+
+				// act
+				_, err := validator.ValidateString(value, validator.StringValidators{
+					validator.StringPhoneValidator{},
+				})
+
+				// assert
+				Expect(err).Should(HaveOccurred())
+				Expect(err.Error()).To(Equal("value is not an international phone number"))
+			})
+
+			It("should return a String when input is an international phone number", func() {
+				// arrange
+				value := "+33 1 09 75 83 51"
+
+				// act
+				result, err := validator.ValidateString(value, validator.StringValidators{
+					validator.StringPhoneValidator{},
+				})
+
+				// assert
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(result).To(Equal("+33 1 09 75 83 51"))
+			})
+
+			It("should not return a String when input is not an international phone number", func() {
+				// arrange
+				value := "01 09 75 83 51"
+
+				// act
+				_, err := validator.ValidateString(value, validator.StringValidators{
+					validator.StringPhoneValidator{},
+				})
+
+				// assert
+				Expect(err).Should(HaveOccurred())
+				Expect(err.Error()).To(Equal("value is not an international phone number"))
+			})
+		})
 	})
 }

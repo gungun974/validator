@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/mail"
 	"unicode/utf8"
+
+	"github.com/ttacon/libphonenumber"
 )
 
 type StringValidators []stringValidator
@@ -40,6 +42,15 @@ type StringEmailValidator struct{}
 func (v StringEmailValidator) Validate(value string) error {
 	if _, err := mail.ParseAddress(value); err != nil {
 		return errors.New(fmt.Sprintf("value is not an email"))
+	}
+	return nil
+}
+
+type StringPhoneValidator struct{}
+
+func (v StringPhoneValidator) Validate(value string) error {
+	if _, err := libphonenumber.Parse(value, ""); err != nil {
+		return errors.New(fmt.Sprintf("value is not an international phone number"))
 	}
 	return nil
 }
