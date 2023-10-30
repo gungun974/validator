@@ -21,7 +21,7 @@ type StringMaxValidator struct {
 
 func (v StringMaxValidator) Validate(value string) error {
 	if utf8.RuneCountInString(value) > v.Max {
-		return errors.New(fmt.Sprintf("value length must not be greater than %v", v.Max))
+		return fmt.Errorf("value length must not be greater than %v", v.Max)
 	}
 	return nil
 }
@@ -32,7 +32,7 @@ type StringMinValidator struct {
 
 func (v StringMinValidator) Validate(value string) error {
 	if utf8.RuneCountInString(value) < v.Min {
-		return errors.New(fmt.Sprintf("value length must not be greater than %v", v.Min))
+		return fmt.Errorf("value length must not be greater than %v", v.Min)
 	}
 	return nil
 }
@@ -41,7 +41,7 @@ type StringEmailValidator struct{}
 
 func (v StringEmailValidator) Validate(value string) error {
 	if _, err := mail.ParseAddress(value); err != nil {
-		return errors.New(fmt.Sprintf("value is not an email"))
+		return fmt.Errorf("value is not an email")
 	}
 	return nil
 }
@@ -50,7 +50,7 @@ type StringPhoneValidator struct{}
 
 func (v StringPhoneValidator) Validate(value string) error {
 	if _, err := libphonenumber.Parse(value, ""); err != nil {
-		return errors.New(fmt.Sprintf("value is not an international phone number"))
+		return fmt.Errorf("value is not an international phone number")
 	}
 	return nil
 }
@@ -58,7 +58,7 @@ func (v StringPhoneValidator) Validate(value string) error {
 func ValidateMapString(name string, value map[string]any, rules StringValidators) (string, error) {
 	rawValue, ok := value[name]
 	if !ok {
-		return "", errors.New(fmt.Sprintf("missing key \"%v\"", name))
+		return "", fmt.Errorf("missing key \"%v\"", name)
 	}
 	return ValidateString(rawValue, rules)
 }

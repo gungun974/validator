@@ -17,7 +17,7 @@ type IntMaxValidator struct {
 
 func (v IntMaxValidator) Validate(value int) error {
 	if value > v.Max {
-		return errors.New(fmt.Sprintf("value must not be greater than %v", v.Max))
+		return fmt.Errorf("value must not be greater than %v", v.Max)
 	}
 	return nil
 }
@@ -28,7 +28,7 @@ type IntMinValidator struct {
 
 func (v IntMinValidator) Validate(value int) error {
 	if value < v.Min {
-		return errors.New(fmt.Sprintf("value must not be greater than %v", v.Min))
+		return fmt.Errorf("value must not be greater than %v", v.Min)
 	}
 	return nil
 }
@@ -36,7 +36,7 @@ func (v IntMinValidator) Validate(value int) error {
 func ValidateMapInt(name string, value map[string]any, rules IntValidators) (int, error) {
 	rawValue, ok := value[name]
 	if !ok {
-		return -1, errors.New(fmt.Sprintf("missing key \"%v\"", name))
+		return -1, fmt.Errorf("missing key \"%v\"", name)
 	}
 	return ValidateInt(rawValue, rules)
 }

@@ -10,7 +10,7 @@ import (
 func ValidateMapUUID(name string, value map[string]any) (uuid.UUID, error) {
 	rawValue, ok := value[name]
 	if !ok {
-		return uuid.UUID{}, errors.New(fmt.Sprintf("missing key \"%v\"", name))
+		return uuid.UUID{}, fmt.Errorf("missing key \"%v\"", name)
 	}
 	return ValidateUUID(rawValue)
 }
