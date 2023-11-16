@@ -6,7 +6,7 @@ import (
 	"net/mail"
 	"unicode/utf8"
 
-	"github.com/ttacon/libphonenumber"
+	"github.com/nyaruka/phonenumbers"
 )
 
 type StringValidators []stringValidator
@@ -49,7 +49,7 @@ func (v StringEmailValidator) Validate(value string) error {
 type StringPhoneValidator struct{}
 
 func (v StringPhoneValidator) Validate(value string) error {
-	if _, err := libphonenumber.Parse(value, ""); err != nil {
+	if _, err := phonenumbers.Parse(value, ""); err != nil {
 		return fmt.Errorf("value is not an international phone number")
 	}
 	return nil
