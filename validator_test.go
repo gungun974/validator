@@ -15,5 +15,6 @@ func TestValidator(t *testing.T) {
 var _ = Describe("Validator", func() {
 	Describe("IntValidator", intValidatorTests)
 	Describe("StringValidator", stringValidatorTests)
+	Describe("BoolValidator", boolValidatorTests)
 	Describe("UUIDValidator", uuidValidatorTests)
 })
