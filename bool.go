@@ -38,6 +38,21 @@ func ValidateMapBool(name string, value map[string]any, rules BoolValidators) (b
 	return ValidateBool(rawValue, rules)
 }
 
+func ValidateMapBoolOrFalse(
+	name string,
+	value map[string]any,
+	rules BoolValidators,
+) (bool, error) {
+	rawValue, ok := value[name]
+	if !ok {
+		return false, nil
+	}
+
+	val, err := ValidateBool(rawValue, rules)
+
+	return val, err
+}
+
 func ValidateBool(value any, rules BoolValidators) (bool, error) {
 	boolValue, boolOk := value.(bool)
 	intValue, intOk := value.(int)
@@ -68,7 +83,9 @@ func ValidateBool(value any, rules BoolValidators) (bool, error) {
 	if stringOk {
 		normalizedStr := strings.ToLower(stringValue)
 
-		if normalizedStr == "true" {
+		if normalizedStr == "on" {
+			boolValue = true
+		} else if normalizedStr == "true" {
 			boolValue = true
 		} else if normalizedStr == "false" {
 			boolValue = false

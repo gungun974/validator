@@ -59,6 +59,18 @@ func boolValidatorTests() {
 			Expect(result).To(Equal(true))
 		})
 
+		It("should return a bool when input string is \"on\" for HTML form suppport", func() {
+			// arrange
+			value := "on"
+
+			// act
+			result, err := validator.ValidateBool(value, validator.BoolValidators{})
+
+			// assert
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(result).To(Equal(true))
+		})
+
 		It("should return a bool when input string is \"false\"", func() {
 			// arrange
 			value := "false"
