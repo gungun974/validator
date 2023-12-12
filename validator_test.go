@@ -18,4 +18,5 @@ var _ = Describe("Validator", func() {
 	Describe("StringValidator", stringValidatorTests)
 	Describe("BoolValidator", boolValidatorTests)
 	Describe("UUIDValidator", uuidValidatorTests)
+	Describe("TimeValidator", timeValidatorTests)
 })
