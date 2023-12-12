@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/mail"
+	"strconv"
 	"unicode/utf8"
 
 	"github.com/nyaruka/phonenumbers"
@@ -80,8 +81,18 @@ func ValidateMapStringOrNil(
 
 func ValidateString(value any, rules StringValidators) (string, error) {
 	stringValue, stringOk := value.(string)
-	if !stringOk {
+	intValue, intOk := value.(int)
+	floatValue, floatOk := value.(float64)
+	if !stringOk && !intOk && !floatOk {
 		return "", errors.New("value is not a string")
+	}
+
+	if intOk {
+		stringValue = strconv.Itoa(intValue)
+	}
+
+	if floatOk {
+		stringValue = strconv.FormatFloat(floatValue, 'f', -1, 64)
 	}
 
 	for _, rule := range rules {

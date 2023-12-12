@@ -37,7 +37,11 @@ func stringValidatorTests() {
 
 		It("should not return an String when input is garbage", func() {
 			// arrange
-			value := 42
+			value := struct {
+				garbage bool
+			}{
+				garbage: true,
+			}
 
 			// act
 			_, err := validator.ValidateString(value, validator.StringValidators{})
@@ -45,6 +49,30 @@ func stringValidatorTests() {
 			// assert
 			Expect(err).Should(HaveOccurred())
 			Expect(err.Error()).To(Equal("value is not a string"))
+		})
+
+		It("should convert int into String", func() {
+			// arrange
+			value := 42
+
+			// act
+			result, err := validator.ValidateString(value, validator.StringValidators{})
+
+			// assert
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(result).To(Equal("42"))
+		})
+
+		It("should convert float into String", func() {
+			// arrange
+			value := 42.69
+
+			// act
+			result, err := validator.ValidateString(value, validator.StringValidators{})
+
+			// assert
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(result).To(Equal("42.69"))
 		})
 
 		It("should return an String when all rules are satisfied", func() {
