@@ -3,6 +3,7 @@ package validator
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 type FloatValidators []floatValidator
@@ -59,4 +60,28 @@ func ValidateFloat(value any, rules FloatValidators) (float64, error) {
 	}
 
 	return floatValue, nil
+}
+
+func CoerceAndValidateMapFloat(
+	name string,
+	value map[string]any,
+	rules FloatValidators,
+) (float64, error) {
+	rawValue, ok := value[name]
+	if !ok {
+		return -1, fmt.Errorf("missing key \"%v\"", name)
+	}
+	return CoerceAndValidateFloat(rawValue, rules)
+}
+
+func CoerceAndValidateFloat(value any, rules FloatValidators) (float64, error) {
+	stringValue, stringOk := value.(string)
+	if stringOk {
+		floatValue, err := strconv.ParseFloat(stringValue, 64)
+		if err == nil {
+			return ValidateFloat(floatValue, rules)
+		}
+	}
+
+	return ValidateFloat(value, rules)
 }

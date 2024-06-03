@@ -3,6 +3,7 @@ package validator
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 type IntValidators []intValidator
@@ -63,4 +64,28 @@ func ValidateInt(value any, rules IntValidators) (int, error) {
 	}
 
 	return intValue, nil
+}
+
+func CoerceAndValidateMapInt(name string, value map[string]any, rules IntValidators) (int, error) {
+	rawValue, ok := value[name]
+	if !ok {
+		return -1, fmt.Errorf("missing key \"%v\"", name)
+	}
+	return CoerceAndValidateInt(rawValue, rules)
+}
+
+func CoerceAndValidateInt(value any, rules IntValidators) (int, error) {
+	stringValue, stringOk := value.(string)
+	if stringOk {
+		intValue, err := strconv.Atoi(stringValue)
+		if err == nil {
+			return ValidateInt(intValue, rules)
+		}
+		floatValue, err := strconv.ParseFloat(stringValue, 64)
+		if err == nil {
+			return ValidateInt(floatValue, rules)
+		}
+	}
+
+	return ValidateInt(value, rules)
 }
